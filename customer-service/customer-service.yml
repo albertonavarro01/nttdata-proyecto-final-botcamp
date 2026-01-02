@@ -1,0 +1,53 @@
+server:
+  port: 8081
+
+
+spring:
+  application:
+    name: customer-service
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: customer_db
+      auto-index-creation: true
+
+# Eureka Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8085/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 10
+
+# WebClient Configuration for customer-service
+customer-service:
+  url: http://customer-service  # Eureka will resolve this
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,openapi
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  level:
+    root: INFO
+    com.bank.customer: DEBUG
+    org.springframework.data.mongodb: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
