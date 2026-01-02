@@ -6,29 +6,13 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      # Rutas explícitas para tus microservicios
       routes:
-        # Auth Service
-        - id: auth-service
-          uri: lb://auth-service
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: authServiceCircuitBreaker
-                fallbackUri: forward:/fallback/auth
-        
         # Customer Service
         - id: customer-service
           uri: lb://customer-service
           predicates:
             - Path=/api/customers/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: customerServiceCircuitBreaker
-                fallbackUri: forward:/fallback/customer
             - RewritePath=/api/customers/(?<segment>.*), /api/v1/customers/${segment}
         
         # Account Service
@@ -37,35 +21,13 @@ spring:
           predicates:
             - Path=/api/accounts/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: accountServiceCircuitBreaker
-                fallbackUri: forward:/fallback/account
             - RewritePath=/api/accounts/(?<segment>.*), /api/v1/accounts/${segment}
         
-        # Credit Service (si lo tienes)
-        - id: credit-service
-          uri: lb://credit-service
+        # Auth Service
+        - id: auth-service
+          uri: lb://auth-service
           predicates:
-            - Path=/api/credits/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: creditServiceCircuitBreaker
-                fallbackUri: forward:/fallback/credit
-            - RewritePath=/api/credits/(?<segment>.*), /api/v1/credits/${segment}
-        
-        # Transaction Service (si lo tienes)
-        - id: transaction-service
-          uri: lb://transaction-service
-          predicates:
-            - Path=/api/transactions/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: transactionServiceCircuitBreaker
-                fallbackUri: forward:/fallback/transaction
-            - RewritePath=/api/transactions/(?<segment>.*), /api/v1/transactions/${segment}
+            - Path=/api/auth/**
       
       discovery:
         locator:
@@ -86,11 +48,6 @@ spring:
             allowed-headers: "*"
             allow-credentials: false
 
-# Configuración JWT
-jwt:
-  secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
-  expiration: ${JWT_EXPIRATION:86400000}
-
 # Configuración de Eureka
 eureka:
   client:
@@ -102,64 +59,16 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
-# Configuración de Resilience4j Circuit Breaker
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        slidingWindowSize: 10
-        slidingWindowType: COUNT_BASED
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-        registerHealthIndicator: true
-        minimumNumberOfCalls: 5
-    instances:
-      authServiceCircuitBreaker:
-        baseConfig: default
-      customerServiceCircuitBreaker:
-        baseConfig: default
-      accountServiceCircuitBreaker:
-        baseConfig: default
-      creditServiceCircuitBreaker:
-        baseConfig: default
-      transactionServiceCircuitBreaker:
-        baseConfig: default
-  
-  retry:
-    configs:
-      default:
-        maxAttempts: 3
-        waitDuration: 500ms
-        enableExponentialBackoff: true
-        exponentialBackoffMultiplier: 2
-        retryExceptions:
-          - org.springframework.web.client.HttpServerErrorException
-          - java.io.IOException
-          - java.util.concurrent.TimeoutException
-    instances:
-      authServiceRetry:
-        baseConfig: default
-      customerServiceRetry:
-        baseConfig: default
-      accountServiceRetry:
-        baseConfig: default
-      creditServiceRetry:
-        baseConfig: default
-      transactionServiceRetry:
-        baseConfig: default
-
 # Configuración de Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,circuitbreakers,circuitbreakerevents
+        include: health,info,gateway,routes
   endpoint:
     health:
       show-details: always
-  health:
-    circuitbreakers:
+    gateway:
       enabled: true
 
 # Logging
@@ -168,7 +77,5 @@ logging:
     root: INFO
     com.bank.gateway: DEBUG
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.security: DEBUG
-    io.github.resilience4j: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
