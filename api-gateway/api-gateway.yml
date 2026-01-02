@@ -26,8 +26,8 @@ spring:
 
 # Configuración JWT
 jwt:
-  secret: miClaveSecretaSuperSeguraParaJWT2024NTTDataBootcamp
-  expiration: 86400000  # 24 horas en milisegundos
+  secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
+  expiration: ${JWT_EXPIRATION:86400000}
 
 # Configuración de Eureka
 eureka:
