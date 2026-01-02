@@ -4,17 +4,7 @@ server:
 spring:
   application:
     name: api-gateway
-
-  # ✅ Spring Cloud Config (Boot 3.x / Spring Cloud 2022+)
-  # Esto hace que el gateway intente traer configuración del Config Server,
-  # pero si no está disponible, igual arranca (por ser optional).
-  config:
-    import: optional:configserver:http://localhost:8888
-
   cloud:
-    config:
-      fail-fast: false
-
     gateway:
       discovery:
         locator:
@@ -73,7 +63,6 @@ resilience4j:
         baseConfig: default
       transactionServiceCircuitBreaker:
         baseConfig: default
-
   retry:
     configs:
       default:
@@ -119,4 +108,4 @@ logging:
     org.springframework.security: DEBUG
     io.github.resilience4j: DEBUG
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"  podrias integrarlo ahi porfavor para evitar errores 
