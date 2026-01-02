@@ -24,10 +24,10 @@ spring:
             allowed-headers: "*"
             allow-credentials: false
 
-# Configuración JWT con variables de entorno
+# Configuración JWT
 jwt:
-  secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
-  expiration: ${JWT_EXPIRATION:86400000}
+  secret: miClaveSecretaSuperSeguraParaJWT2024NTTDataBootcamp
+  expiration: 86400000  # 24 horas en milisegundos
 
 # Configuración de Eureka
 eureka:
