@@ -4,26 +4,15 @@ server:
 spring:
   application:
     name: api-gateway
-  
   cloud:
     gateway:
       routes:
-        # Customer Service - Base
-        - id: customer-service-base
-          uri: lb://CUSTOMER-SERVICE
-          predicates:
-            - Path=/api/customers
-          filters:
-            - SetPath=/api/v1/customers
-        
-        # Customer Service - With params
-        - id: customer-service-params
+        - id: customer-service
           uri: lb://CUSTOMER-SERVICE
           predicates:
             - Path=/api/customers/**
           filters:
-            - RewritePath=/api/customers/(?<remaining>.*), /api/v1/customers/${remaining}
-      
+            - RewritePath=/api/customers(?<segment>.*), /api/v1/customers${segment}
       discovery:
         locator:
           enabled: true
@@ -36,21 +25,12 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
 
-# CONFIGURACIÓN CRÍTICA DEL ACTUATOR
 management:
-  endpoint:
-    gateway:
-      enabled: true
-    health:
-      show-details: always
   endpoints:
     web:
       exposure:
-        include: "*"  # ← Usa comillas dobles y asterisco
-      base-path: /actuator
+        include: '*'
 
 logging:
   level:
-    root: INFO
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: DEBUG
