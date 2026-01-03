@@ -18,7 +18,7 @@ spring:
               args:
                 name: customerServiceCircuitBreaker
                 fallbackUri: forward:/fallback/customers
-            - RewritePath=/api/customers/?(?<segment>.*), /api/v1/customers/${segment}
+            - RewritePath=/api/customers/?(?<segment>.*), /api/customers/${segment}
 
         # Account Service
         - id: account-service
