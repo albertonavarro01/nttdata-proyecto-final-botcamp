@@ -1,8 +1,10 @@
 server:
   port: 8080
+
 spring:
   application:
     name: api-gateway
+  
   cloud:
     gateway:
       routes:
@@ -87,3 +89,22 @@ logging:
     org.springframework.cloud.gateway: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      customerServiceCircuitBreaker:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+      accountServiceCircuitBreaker:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+      authServiceCircuitBreaker:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
