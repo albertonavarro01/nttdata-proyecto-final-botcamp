@@ -9,28 +9,40 @@ spring:
     gateway:
       routes:
         # Customer Service
-- id: customer-service
-  uri: lb://customer-service
-  predicates:
-    - Path=/api/customers, /api/customers/**
-  filters:
-    - RewritePath=/api/customers/?(?<segment>.*), /api/v1/customers/${segment}
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/customers, /api/customers/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: customerServiceCircuitBreaker
+                fallbackUri: forward:/fallback/customers
+            - RewritePath=/api/customers/?(?<segment>.*), /api/v1/customers/${segment}
 
-# Account Service
-- id: account-service
-  uri: lb://account-service
-  predicates:
-    - Path=/api/accounts, /api/accounts/**
-  filters:
-    - RewritePath=/api/accounts/?(?<segment>.*), /api/v1/accounts/${segment}
+        # Account Service
+        - id: account-service
+          uri: lb://account-service
+          predicates:
+            - Path=/api/accounts, /api/accounts/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: accountServiceCircuitBreaker
+                fallbackUri: forward:/fallback/accounts
+            - RewritePath=/api/accounts/?(?<segment>.*), /api/v1/accounts/${segment}
 
-# Auth Service
-- id: auth-service
-  uri: lb://auth-service
-  predicates:
-    - Path=/api/auth, /api/auth/**
-  filters:
-    - RewritePath=/api/auth/?(?<segment>.*), /api/v1/auth/${segment}
+        # Auth Service
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth, /api/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: authServiceCircuitBreaker
+                fallbackUri: forward:/fallback/auth
+            - RewritePath=/api/auth/?(?<segment>.*), /api/v1/auth/${segment}
 
       discovery:
         locator:
