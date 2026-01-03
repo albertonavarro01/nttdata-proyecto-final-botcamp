@@ -8,7 +8,7 @@ spring:
   cloud:
     gateway:
       routes:
-        # Customer Service
+        # Customer Service - Base
         - id: customer-service-base
           uri: lb://CUSTOMER-SERVICE
           predicates:
@@ -16,6 +16,7 @@ spring:
           filters:
             - SetPath=/api/v1/customers
         
+        # Customer Service - With params
         - id: customer-service-params
           uri: lb://CUSTOMER-SERVICE
           predicates:
@@ -35,18 +36,21 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
 
+# CONFIGURACIÓN CRÍTICA DEL ACTUATOR
 management:
   endpoint:
     gateway:
-      enabled: true  # ← MUY IMPORTANTE
+      enabled: true
     health:
       show-details: always
   endpoints:
     web:
       exposure:
-        include: gateway,health,info  # ← Especifica gateway explícitamente
+        include: "*"  # ← Usa comillas dobles y asterisco
+      base-path: /actuator
 
 logging:
   level:
     root: INFO
     org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: DEBUG
