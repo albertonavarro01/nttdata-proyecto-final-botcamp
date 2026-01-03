@@ -10,15 +10,15 @@ spring:
       routes:
         # Customer Service
         - id: customer-service
-          uri: lb://customer-service
-          predicates:
-            - Path=/api/customers, /api/customers/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: customerServiceCircuitBreaker
-                fallbackUri: forward:/fallback/customers
-            - RewritePath=/api/customers/?(?<segment>.*), /api/customers/${segment}
+        uri: lb://customer-service
+        predicates:
+        - Path=/api/customers, /api/customers/**
+        filters:
+        - name: CircuitBreaker
+        args:
+        name: customerServiceCircuitBreaker
+        fallbackUri: forward:/fallback/customers
+        - RewritePath=/api/customers/?(?<segment>.*), /api/v1/customers/${segment}
 
         # Account Service
         - id: account-service
