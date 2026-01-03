@@ -10,58 +10,32 @@ spring:
       routes:
         # Customer Service
         - id: customer-service
-          uri: lb://customer-service
+          uri: lb://CUSTOMER-SERVICE  # ← MAYÚSCULAS como aparece en Eureka
           predicates:
-            - Path=/api/customers,/api/customers/**
+            - Path=/api/customers/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: customerServiceCircuitBreaker
-                fallbackUri: forward:/fallback/customers
-            - RewritePath=/api/customers(?<segment>/?.*), /api/v1/customers${segment}
+            - RewritePath=/api/customers(?<segment>.*), /api/v1/customers${segment}
         
         # Account Service
         - id: account-service
-          uri: lb://account-service
+          uri: lb://ACCOUNT-SERVICE  # ← MAYÚSCULAS
           predicates:
-            - Path=/api/accounts,/api/accounts/**
+            - Path=/api/accounts/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: accountServiceCircuitBreaker
-                fallbackUri: forward:/fallback/accounts
-            - RewritePath=/api/accounts(?<segment>/?.*), /api/v1/accounts${segment}
+            - RewritePath=/api/accounts(?<segment>.*), /api/v1/accounts${segment}
         
         # Auth Service
         - id: auth-service
-          uri: lb://auth-service
+          uri: lb://AUTH-SERVICE  # ← MAYÚSCULAS
           predicates:
-            - Path=/api/auth,/api/auth/**
+            - Path=/api/auth/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: authServiceCircuitBreaker
-                fallbackUri: forward:/fallback/auth
-            - RewritePath=/api/auth(?<segment>/?.*), /api/v1/auth${segment}
+            - RewritePath=/api/auth(?<segment>.*), /api/v1/auth${segment}
       
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
-      
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-origins: "*"
-            allowed-methods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - PATCH
-              - OPTIONS
-            allowed-headers: "*"
-            allow-credentials: false
 
 eureka:
   client:
@@ -71,40 +45,24 @@ eureka:
     register-with-eureka: true
   instance:
     prefer-ip-address: true
-    instance-id: ${spring.application.name}:${random.value}
+    hostname: localhost
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,gateway
+        include: "*"  # ← Cambia a * para exponer todos
   endpoint:
     gateway:
       enabled: true
+    health:
+      show-details: always
 
 logging:
   level:
     root: INFO
     com.bank.gateway: DEBUG
     org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: DEBUG
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      customerServiceCircuitBreaker:
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10000
-        permittedNumberOfCallsInHalfOpenState: 3
-      accountServiceCircuitBreaker:
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10000
-        permittedNumberOfCallsInHalfOpenState: 3
-      authServiceCircuitBreaker:
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10000
-        permittedNumberOfCallsInHalfOpenState: 3
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
