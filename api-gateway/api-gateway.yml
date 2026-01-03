@@ -31,11 +31,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
-      base-path: /actuator
+        include: '*'  # ← Asegúrate de tener el asterisco
   endpoint:
     gateway:
-      enabled: true
+      enabled: true  # ← Habilita explícitamente gateway
     health:
       show-details: always
 
@@ -43,4 +42,3 @@ logging:
   level:
     root: INFO
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: DEBUG
