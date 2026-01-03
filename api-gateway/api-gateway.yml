@@ -14,7 +14,7 @@ spring:
           predicates:
             - Path=/api/customers/**
           filters:
-            - RewritePath=/api/customers/(?<segment>.*), /api/v1/customers/${segment}
+            - RewritePath=/api/customers/?(?<segment>.*), /api/v1/customers/${segment}
 
         # Account Service
         - id: account-service
@@ -22,7 +22,7 @@ spring:
           predicates:
             - Path=/api/accounts/**
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /api/v1/accounts/${segment}
+            - RewritePath=/api/accounts/?(?<segment>.*), /api/v1/accounts/${segment}
 
         # Auth Service
         - id: auth-service
@@ -30,7 +30,7 @@ spring:
           predicates:
             - Path=/api/auth/**
           filters:
-            - RewritePath=/api/auth/(?<segment>.*), /api/v1/auth/${segment}
+            - RewritePath=/api/auth/?(?<segment>.*), /api/v1/auth/${segment}
 
       discovery:
         locator:
@@ -51,7 +51,6 @@ spring:
             allowed-headers: "*"
             allow-credentials: false
 
-# Configuración de Eureka
 eureka:
   client:
     service-url:
@@ -62,7 +61,6 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${random.value}
 
-# Actuator
 management:
   endpoint:
     health:
@@ -74,7 +72,6 @@ management:
       exposure:
         include: health,info,gateway
 
-# Logging
 logging:
   level:
     root: INFO
