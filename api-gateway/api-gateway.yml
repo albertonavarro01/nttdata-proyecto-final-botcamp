@@ -8,29 +8,12 @@ spring:
   cloud:
     gateway:
       routes:
-        # Customer Service
         - id: customer-service
-          uri: lb://CUSTOMER-SERVICE  # ← MAYÚSCULAS como aparece en Eureka
+          uri: lb://CUSTOMER-SERVICE
           predicates:
             - Path=/api/customers/**
           filters:
-            - RewritePath=/api/customers(?<segment>.*), /api/v1/customers${segment}
-        
-        # Account Service
-        - id: account-service
-          uri: lb://ACCOUNT-SERVICE  # ← MAYÚSCULAS
-          predicates:
-            - Path=/api/accounts/**
-          filters:
-            - RewritePath=/api/accounts(?<segment>.*), /api/v1/accounts${segment}
-        
-        # Auth Service
-        - id: auth-service
-          uri: lb://AUTH-SERVICE  # ← MAYÚSCULAS
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - RewritePath=/api/auth(?<segment>.*), /api/v1/auth${segment}
+            - RewritePath=/api/customers(?<remaining>.*), /api/v1/customers${remaining}
       
       discovery:
         locator:
@@ -43,15 +26,13 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
-  instance:
-    prefer-ip-address: true
-    hostname: localhost
 
 management:
   endpoints:
     web:
       exposure:
-        include: "*"  # ← Cambia a * para exponer todos
+        include: '*'
+      base-path: /actuator
   endpoint:
     gateway:
       enabled: true
@@ -61,8 +42,5 @@ management:
 logging:
   level:
     root: INFO
-    com.bank.gateway: DEBUG
     org.springframework.cloud.gateway: DEBUG
     org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: DEBUG
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
