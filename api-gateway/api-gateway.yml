@@ -62,15 +62,13 @@ eureka:
     instance-id: ${spring.application.name}:${random.value}
 
 management:
-  endpoint:
-    health:
-      show-details: always
-    gateway:
-      enabled: true
   endpoints:
     web:
       exposure:
         include: health,info,gateway
+  endpoint:
+    gateway:
+      enabled: true
 
 logging:
   level:
