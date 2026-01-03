@@ -62,17 +62,17 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${random.value}
 
-# Configuración de Actuator
+# Actuator
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,gateway,routes
   endpoint:
     health:
       show-details: always
     gateway:
       enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
 
 # Logging
 logging:
