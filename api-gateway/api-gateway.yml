@@ -7,12 +7,30 @@ spring:
   cloud:
     gateway:
       routes:
+        # CUSTOMER
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
           predicates:
             - Path=/api/customers/**
           filters:
             - RewritePath=/api/customers(?<segment>.*), /api/v1/customers${segment}
+
+        # ACCOUNTS (account-service)
+        - id: account-service-accounts
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/api/accounts/**
+          filters:
+            - RewritePath=/api/accounts(?<segment>.*), /api/v1/accounts${segment}
+
+        # TRANSACTIONS (account-service)
+        - id: account-service-transactions
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/api/transactions/**
+          filters:
+            - RewritePath=/api/transactions(?<segment>.*), /api/v1/transaction${segment}
+
       discovery:
         locator:
           enabled: true
@@ -29,7 +47,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"
 
 logging:
   level:
