@@ -11,9 +11,7 @@ spring:
       database: account_db
       auto-index-creation: true
 
-customer-service:
-  url: http://localhost:8081
-
+# Eureka Configuration
 eureka:
   client:
     service-url:
@@ -24,8 +22,45 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
 
+# Management endpoints
 management:
   endpoints:
     web:
       exposure:
         include: health,info,metrics,mappings
+  endpoint:
+    health:
+      show-details: always
+    info:
+      env:
+        enabled: true
+
+# Application Info
+info:
+  app:
+    name: Customer Service
+    description: Microservicio de gestión de clientes (personal y empresarial)
+    version: 1.0.0
+    encoding: UTF-8
+    java:
+      version: 17
+  team:
+    name: Banking System Team
+    project: NTTData Final Project
+  build:
+    artifact: customer-service
+    group: com.bank
+
+# OpenAPI/Swagger Documentation
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.bank.customer: DEBUG
+    org.springframework.data.mongodb: DEBUG
