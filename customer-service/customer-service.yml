@@ -8,7 +8,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: account_db
+      database: customer_db
       auto-index-creation: true
 
 # Eureka Configuration
