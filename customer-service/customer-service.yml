@@ -1,18 +1,19 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
   application:
-    name: customer-service
-  
+    name: account-service
   data:
     mongodb:
       host: localhost
       port: 27017
-      database: customer_db
+      database: account_db
       auto-index-creation: true
 
-# Eureka Configuration
+customer-service:
+  url: http://localhost:8081
+
 eureka:
   client:
     service-url:
@@ -22,27 +23,9 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
-    lease-renewal-interval-in-seconds: 10
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
-  endpoint:
-    health:
-      show-details: always
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-  api-docs:
-    path: /v3/api-docs
-
-logging:
-  level:
-    root: INFO
-    com.bank.customer: DEBUG
-    org.springframework.data.mongodb: DEBUG
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+        include: health,info,metrics,mappings
