@@ -67,6 +67,6 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
 
-# 🔐 CLAVE QUE USA SecurityConfig (@Value("${jwt.secret}"))
+# 🔐 JWT (NECESARIO para SecurityConfig)
 jwt:
-  secret: mySecretKey1234567890123456789012
+  secret: "un_secreto_de_32_o_mas_caracteres___________OK"
