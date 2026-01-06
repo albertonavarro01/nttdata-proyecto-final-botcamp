@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
       routes:
@@ -22,7 +23,7 @@ spring:
           predicates:
             - Path=/api/accounts/**
           filters:
-            - RewritePath=/api/accounts(?<segment>.*), /accounts${segment}
+            - RewritePath=/api/accounts(?<segment>.*), /api/v1/accounts${segment}
 
         # TRANSACTIONS (account-service)
         - id: account-service-transactions
@@ -30,7 +31,7 @@ spring:
           predicates:
             - Path=/api/transactions/**
           filters:
-            - RewritePath=/api/transactions(?<segment>.*), /transactions${segment}
+            - RewritePath=/api/transactions(?<segment>.*), /api/v1/transactions${segment}
 
       discovery:
         locator:
@@ -49,10 +50,10 @@ management:
     web:
       exposure:
         include: "*"
-        
-    endpoint:
+
+  endpoint:
     gateway:
-      enabled: true    
+      enabled: true
 
 logging:
   level:
