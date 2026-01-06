@@ -8,7 +8,15 @@ spring:
   cloud:
     gateway:
       routes:
-
+      
+        # AUTH-SERVICE 🔐
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/auth(?<segment>.*), /api/v1/auth${segment}
+            
         # CUSTOMER
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
