@@ -5,14 +5,10 @@ spring:
   application:
     name: auth-service
 
-  # Si usas MongoDB para guardar usuarios/credenciales
   data:
     mongodb:
       uri: mongodb://localhost:27017/auth-service
-      # O si usas MongoDB en contenedor:
-      # uri: mongodb://mongo:27017/auth-service
 
-# Configuración de Eureka Client
 eureka:
   client:
     service-url:
@@ -23,12 +19,10 @@ eureka:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${random.value}
 
-# Configuración JWT
 jwt:
   secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
   expiration: ${JWT_EXPIRATION:86400000}
 
-# Actuator para health checks
 management:
   endpoints:
     web:
