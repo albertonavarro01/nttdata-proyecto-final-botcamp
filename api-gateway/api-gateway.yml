@@ -7,6 +7,7 @@ spring:
   cloud:
     gateway:
       routes:
+
         # CUSTOMER
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
@@ -21,7 +22,7 @@ spring:
           predicates:
             - Path=/api/accounts/**
           filters:
-            - RewritePath=/api/accounts(?<segment>.*), /api/v1/accounts${segment}
+            - RewritePath=/api/accounts(?<segment>.*), /accounts${segment}
 
         # TRANSACTIONS (account-service)
         - id: account-service-transactions
@@ -29,7 +30,7 @@ spring:
           predicates:
             - Path=/api/transactions/**
           filters:
-            - RewritePath=/api/transactions(?<segment>.*), /api/v1/transactions${segment}
+            - RewritePath=/api/transactions(?<segment>.*), /transactions${segment}
 
       discovery:
         locator:
