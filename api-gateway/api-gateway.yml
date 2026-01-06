@@ -5,6 +5,13 @@ spring:
   application:
     name: api-gateway
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # usamos nuestro decoder custom, pero esto evita conflictos
+          jws-algorithms: HS256
+
   cloud:
     gateway:
       routes:
@@ -59,14 +66,10 @@ management:
       exposure:
         include: "*"
 
-  endpoint:
-    gateway:
-      enabled: true
-
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
 
-# 🔐 CLAVE QUE USA SecurityConfig (@Value("${jwt.secret}"))
+# 👇 ESTA ES LA PROPIEDAD QUE NECESITA SecurityConfig
 jwt:
   secret: mySecretKey1234567890123456789012
