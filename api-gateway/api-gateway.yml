@@ -29,7 +29,7 @@ spring:
           predicates:
             - Path=/api/transactions/**
           filters:
-            - RewritePath=/api/transactions(?<segment>.*), /api/v1/transaction${segment}
+            - RewritePath=/api/transactions(?<segment>.*), /api/v1/transactions${segment}
 
       discovery:
         locator:
