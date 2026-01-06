@@ -21,7 +21,7 @@ eureka:
 
 jwt:
   secret: "un_secreto_de_32_o_mas_caracteres___________OK"
-  expiration-minutes: 30
+  expiration: 1800000   # 30 minutos en milisegundos
 
 management:
   endpoints:
