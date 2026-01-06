@@ -5,10 +5,17 @@ spring:
   application:
     name: api-gateway
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Usa la misma clave que en auth-service
+          secret-key: ${jwt.secret}
+
   cloud:
     gateway:
       routes:
-      
+
         # AUTH-SERVICE 🔐
         - id: auth-service
           uri: lb://AUTH-SERVICE
@@ -16,7 +23,7 @@ spring:
             - Path=/api/auth/**
           filters:
             - RewritePath=/api/auth(?<segment>.*), /api/v1/auth${segment}
-            
+
         # CUSTOMER
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
@@ -45,6 +52,10 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+
+jwt:
+  # MISMA clave que en auth-service (jwt.secret)
+  secret: mySecretKey1234567890123456789012
 
 eureka:
   client:
