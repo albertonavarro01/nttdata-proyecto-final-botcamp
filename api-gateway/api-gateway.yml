@@ -4,43 +4,37 @@ server:
 spring:
   application:
     name: api-gateway
-
   cloud:
     gateway:
       routes:
-
-        # AUTH-SERVICE 🔐
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/api/auth/**
           filters:
             - RewritePath=/api/auth(?<segment>.*), /api/v1/auth${segment}
-
-        # CUSTOMER
+        
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
           predicates:
             - Path=/api/customers/**
           filters:
             - RewritePath=/api/customers(?<segment>.*), /api/v1/customers${segment}
-
-        # ACCOUNTS (account-service)
+        
         - id: account-service-accounts
           uri: lb://ACCOUNT-SERVICE
           predicates:
             - Path=/api/accounts/**
           filters:
             - RewritePath=/api/accounts(?<segment>.*), /api/v1/accounts${segment}
-
-        # TRANSACTIONS (account-service)
+        
         - id: account-service-transactions
           uri: lb://ACCOUNT-SERVICE
           predicates:
             - Path=/api/transactions/**
           filters:
             - RewritePath=/api/transactions(?<segment>.*), /api/v1/transactions${segment}
-
+      
       discovery:
         locator:
           enabled: true
@@ -58,7 +52,6 @@ management:
     web:
       exposure:
         include: "*"
-
   endpoint:
     gateway:
       enabled: true
@@ -67,6 +60,6 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
 
-# 🔐 JWT (NECESARIO para SecurityConfig)
 jwt:
-  secret: "un_secreto_de_32_o_mas_caracteres___________OK"
+  secret: un_secreto_de_32_o_mas_caracteres___________OK
+  expiration-ms: 86400000
