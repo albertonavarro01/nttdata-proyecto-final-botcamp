@@ -38,12 +38,14 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
+
 management:
   endpoints:
     web:
@@ -52,9 +54,11 @@ management:
   endpoint:
     gateway:
       enabled: true
+
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+
 jwt:
   secret: "un_secreto_de_32_o_mas_caracteres___________OK"
-  expiration-minutes: 1440  # ✅ CAMBIO: 24 horas (antes eran 86400000 ms)
+  expiration-minutes: 1440  # 24 horas
