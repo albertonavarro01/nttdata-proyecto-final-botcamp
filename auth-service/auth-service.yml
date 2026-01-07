@@ -1,14 +1,11 @@
 server:
   port: 8083
-
 spring:
   application:
     name: auth-service
-
   data:
     mongodb:
       uri: mongodb://localhost:27017/auth-service
-
 eureka:
   client:
     service-url:
@@ -18,11 +15,9 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${random.value}
-
 jwt:
   secret: "un_secreto_de_32_o_mas_caracteres___________OK"
-  expiration: 1800000   # 30 minutos en milisegundos
-
+  expiration-minutes: 30   # ✅ Cambiado de "expiration" a "expiration-minutes"
 management:
   endpoints:
     web:
