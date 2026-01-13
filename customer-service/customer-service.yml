@@ -15,7 +15,7 @@ spring:
   # Configuración de Redis (AGREGAR ESTO)
   redis:
     host: localhost
-    port: 6378
+    port: 6379
     timeout: 2000ms
     lettuce:
       pool:
