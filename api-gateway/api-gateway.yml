@@ -61,5 +61,5 @@ logging:
     org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
 
 jwt:
-  secret: "un_secreto_de_32_o_mas_caracteres___________OK"
-  expiration-minutes: 1440
+  secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
+  expiration: ${JWT_EXPIRATION:1800000}  # 30 minutos en milisegundos
