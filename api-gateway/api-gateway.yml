@@ -6,6 +6,7 @@ spring:
   cloud:
     gateway:
       routes:
+        # AUTH-SERVICE 🔐
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
@@ -13,6 +14,7 @@ spring:
           filters:
             - RewritePath=/api/auth/(?<segment>.*), /api/v1/auth/${segment}
         
+        # CUSTOMER-SERVICE
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
           predicates:
@@ -20,6 +22,7 @@ spring:
           filters:
             - RewritePath=/api/customers/(?<segment>.*), /api/v1/customers/${segment}
         
+        # ACCOUNT-SERVICE (accounts)
         - id: account-service-accounts
           uri: lb://ACCOUNT-SERVICE
           predicates:
@@ -27,6 +30,7 @@ spring:
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /api/v1/accounts/${segment}
         
+        # ACCOUNT-SERVICE (transactions)
         - id: account-service-transactions
           uri: lb://ACCOUNT-SERVICE
           predicates:
@@ -58,7 +62,7 @@ management:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
 
 jwt:
   secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
+  expiration-ms: ${JWT_EXPIRATION:1800000}  # 30 minutos
