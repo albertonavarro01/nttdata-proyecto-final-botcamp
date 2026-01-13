@@ -15,9 +15,11 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${random.value}
+
 jwt:
   secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
-  expiration-ms: ${JWT_EXPIRATION_MS:1800000} 
+  expiration-minutes: 5  # 5 minutos de expiración
+
 management:
   endpoints:
     web:
