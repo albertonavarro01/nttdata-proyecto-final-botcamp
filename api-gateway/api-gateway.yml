@@ -7,7 +7,7 @@ spring:
   cloud:
     gateway:
       routes:
-        # AUTH-SERVICE 🔐
+        # AUTH-SERVICE (rutas públicas)
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
@@ -25,7 +25,7 @@ spring:
             - StripPrefix=1
             - PrefixPath=/api/v1
         
-        # ACCOUNT-SERVICE (accounts)
+        # ACCOUNT-SERVICE
         - id: account-service-accounts
           uri: lb://ACCOUNT-SERVICE
           predicates:
@@ -33,7 +33,6 @@ spring:
           filters:
             - StripPrefix=1
         
-        # ACCOUNT-SERVICE (transactions)
         - id: account-service-transactions
           uri: lb://ACCOUNT-SERVICE
           predicates:
@@ -52,10 +51,9 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     fetch-registry: true
     register-with-eureka: true
-
+    
 jwt:
   secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
-  expiration: ${JWT_EXPIRATION:300000}  
 
 management:
   endpoints:
@@ -69,3 +67,4 @@ management:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+    com.bank.gateway: DEBUG
