@@ -11,28 +11,28 @@ spring:
           predicates:
             - Path=/api/auth/**
           filters:
-            - RewritePath=/api/auth(?<segment>.*), /api/v1/auth${segment}
+            - RewritePath=/api/auth/(?<segment>.*), /api/v1/auth/${segment}
         
         - id: customer-service
           uri: lb://CUSTOMER-SERVICE
           predicates:
             - Path=/api/customers/**
           filters:
-            - RewritePath=/api/customers(?<segment>.*), /api/v1/customers${segment}
+            - RewritePath=/api/customers/(?<segment>.*), /api/v1/customers/${segment}
         
         - id: account-service-accounts
           uri: lb://ACCOUNT-SERVICE
           predicates:
             - Path=/api/accounts/**
           filters:
-            - RewritePath=/api/accounts(?<segment>.*), /api/v1/accounts${segment}
+            - RewritePath=/api/accounts/(?<segment>.*), /api/v1/accounts/${segment}
         
         - id: account-service-transactions
           uri: lb://ACCOUNT-SERVICE
           predicates:
             - Path=/api/transactions/**
           filters:
-            - RewritePath=/api/transactions(?<segment>.*), /api/v1/transactions${segment}
+            - RewritePath=/api/transactions/(?<segment>.*), /api/v1/transactions/${segment}
       
       discovery:
         locator:
@@ -58,7 +58,8 @@ management:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: TRACE
 
 jwt:
   secret: "un_secreto_de_32_o_mas_caracteres___________OK"
-  expiration-minutes: 1440  # 24 horas
+  expiration-minutes: 1440
