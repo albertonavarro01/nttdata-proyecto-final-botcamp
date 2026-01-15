@@ -55,7 +55,30 @@ eureka:
 jwt:
   secret: ${JWT_SECRET:mySecretKey1234567890123456789012}
   expiration-minutes: ${JWT_EXPIRATION_MINUTES:5}  # ← AQUÍ cambias la duración
-
+# Configuración global de Resilience4j
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        # UMBRALES PRINCIPALES
+        slidingWindowSize: 10                    
+        failureRateThreshold: 50                 
+        slowCallRateThreshold: 50                
+        slowCallDurationThreshold: 2s           
+        
+        # ESTADOS DEL CIRCUIT BREAKER
+        waitDurationInOpenState: 10s             
+        permittedNumberOfCallsInHalfOpenState:
+        
+        # COMPORTAMIENTO
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        registerHealthIndicator: true
+        
+    instances:
+      customerServiceCircuitBreaker:
+        baseConfig: default
+      accountServiceCircuitBreaker:
+        baseConfig: default
 
 management:
   endpoints:
